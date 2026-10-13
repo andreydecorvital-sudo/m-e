@@ -67,6 +67,7 @@ async function refresh() {
 }
 for (const button of document.querySelectorAll('.filter')) button.addEventListener('click', () => {filter = button.dataset.profile; sessions(); detail();});
 $('refresh').addEventListener('click', refresh);
+$('access-form').addEventListener('submit', event => {event.preventDefault(); access = $('access-key').value.trim(); $('access-key').value = ''; refresh();});
 $('private-link').addEventListener('click', () => access ? copy(`${location.origin}/painel#acesso=${encodeURIComponent(access)}`) : notify('Abra primeiro seu link privado.'));
 $('logout').addEventListener('click', () => {access = ''; records = []; try {sessionStorage.removeItem(SESSION);} catch {} $('dashboard').hidden = true; refresh();});
 setInterval(() => {if (!document.hidden) refresh();}, 10000); document.addEventListener('visibilitychange', () => {if (!document.hidden) refresh();}); refresh();
