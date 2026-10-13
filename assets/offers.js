@@ -34,7 +34,7 @@ function renderEditor() {
   countRows(); $('old-draft').hidden = !(draft.date && draft.date < today());
   if (!$('old-draft').hidden) $('old-draft').textContent = `Você retomou uma tabela de ${displayDate(draft.date)}. Comece uma nova tabela para os preços de hoje ou atualize a data e confira todos os valores.`;
 }
-function enableExports() {for (const id of ['share', 'download', 'copy-text']) $(id).disabled = !$('confirmed').checked || !file;}
+function enableExports() {for (const id of ['share', 'download', 'copy-text']) $(id).disabled = !$('confirmed').checked || !file; renderClients();}
 function edit() {
   $('editor').hidden = false; $('review').hidden = true; $('edit-step').classList.add('active'); $('edit-step').setAttribute('aria-current', 'step'); $('review-step').classList.remove('active'); $('review-step').removeAttribute('aria-current');
 }
@@ -102,6 +102,62 @@ $('copy-text').addEventListener('click', async () => {
   try {await navigator.clipboard.writeText($('message').value); notify('Mensagem copiada. É só colar no WhatsApp.');}
   catch {$('message').parentElement.open = true; $('message').focus(); $('message').select(); try {if (document.execCommand('copy')) return notify('Mensagem copiada.');} catch {} notify('Texto selecionado. Toque e segure para copiar.');}
 });
+
+const CLIENT_KEY = 'pmg-local-contacts-v1:' + profile;
+const SENT_KEY = 'pmg-local-sent-v1:' + profile;
+let clients = [], sent = {};
+try {
+  clients = JSON.parse(localStorage.getItem(CLIENT_KEY) || '[]');
+  sent = JSON.parse(localStorage.getItem(SENT_KEY) || '{}');
+  if (!Array.isArray(clients)) clients = [];
+  if (!sent || typeof sent !== 'object' || Array.isArray(sent)) sent = {};
+} catch { clients = []; sent = {}; }
+function contactSave() {
+  if (preview) return;
+  try { localStorage.setItem(CLIENT_KEY, JSON.stringify(clients)); localStorage.setItem(SENT_KEY, JSON.stringify(sent)); }
+  catch { notify('Não foi possível guardar seus contatos neste aparelho.'); }
+}
+function contactPhone(raw) {
+  const digits = String(raw).replace(/\\D/g, '');
+  if (digits.length === 10 || digits.length === 11) return '55' + digits;
+  if ((digits.length === 12 || digits.length === 13) && digits.startsWith('55')) return digits;
+  return '';
+}
+function sentKey(client) { return (offer?.date || draft.date) + ':' + client.id; }
+function renderClients() {
+  const host = $('client-list'); host.replaceChildren();
+  const completed = clients.filter(c => sent[sentKey(c)] === true).length;
+  $('client-count').textContent = clients.length ? completed + ' de ' + clients.length + ' clientes marcados como enviados nesta data.' : 'Nenhum cliente cadastrado.';
+  for (const c of clients) {
+    const row = node('div', 'client-row'), information = node('div', 'client-info'), actions = node('div', 'client-actions');
+    information.append(node('strong', null, c.name), node('small', null, c.phone));
+    const done = sent[sentKey(c)] === true;
+    const open = node('button', 'client-open', 'Abrir WhatsApp');
+    open.type = 'button'; open.disabled = !offer || !$('confirmed').checked || !file;
+    open.addEventListener('click', () => {
+      const number = contactPhone(c.phone); if (!number || !offer || !$('confirmed').checked) return;
+      const url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(offerText(offer));
+      const tab = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!tab) notify('Seu navegador bloqueou a nova aba. Permita abrir o WhatsApp.');
+    });
+    const mark = node('button', 'client-mark' + (done ? ' done' : ''), done ? '✓ Enviado' : 'Marcar enviado');
+    mark.type = 'button'; mark.addEventListener('click', () => {
+      if (!offer || !$('confirmed').checked || !file) return notify('Confira a oferta primeiro.');
+      sent[sentKey(c)] = !sent[sentKey(c)]; contactSave(); renderClients();
+    });
+    const remove = node('button', 'client-remove', 'Excluir'); remove.type = 'button';
+    remove.addEventListener('click', () => {if (!confirm('Excluir este contato apenas deste aparelho?')) return; clients = clients.filter(x => x.id !== c.id); contactSave(); renderClients();});
+    actions.append(open, mark, remove); row.append(information, actions); host.append(row);
+  }
+}
+$('add-client').addEventListener('click', () => {
+  const name = $('contact-name').value.trim(), phone = contactPhone($('contact-phone').value);
+  if (!name || !phone) return notify('Informe um nome e um WhatsApp válido com DDD.');
+  if (clients.some(c => contactPhone(c.phone) === phone)) return notify('Esse telefone já está cadastrado.');
+  clients.push({id: crypto.randomUUID(), name, phone});
+  contactSave(); $('contact-name').value = ''; $('contact-phone').value = ''; renderClients(); notify('Cliente adicionado.');
+});
+
 try {if (!preview) draft = normalizeDraft(JSON.parse(localStorage.getItem(KEY) || 'null'));} catch {draft = blankDraft();}
 $('date').min = today(); $('form-link').href = `/${profile}`; $('hello').textContent = `${profile === 'tia' ? 'Tia' : 'Mãe'}, informe os preços, confira e deixe a arte com a gente.`;
-renderEditor(); persist();
+renderEditor(); persist(); renderClients();
