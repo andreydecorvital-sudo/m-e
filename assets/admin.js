@@ -53,11 +53,11 @@ function detail() {
 function render() {personCards(); sessions(); detail();}
 async function refresh() {
   if (busy) return;
-  if (!access) {$('locked').hidden = false; $('dashboard').hidden = true; $('panel-status').textContent = 'Entre pelo seu link privado.'; return;}
+  if (!access) {$('locked').hidden = false; $('dashboard').hidden = true; $('panel-status').textContent = 'Digite sua chave privada abaixo.'; return;}
   busy = true; $('refresh').disabled = true;
   try {
     const response = await fetch('/api/admin', {headers: {Authorization: 'Bearer ' + access}, cache: 'no-store'}), data = await response.json();
-    if (response.status === 401) {$('locked').hidden = false; $('dashboard').hidden = true; $('panel-status').textContent = 'O acesso privado não foi reconhecido. Use o link entregue a você.'; return;}
+    if (response.status === 401) {$('locked').hidden = false; $('dashboard').hidden = true; $('panel-status').textContent = 'Chave não reconhecida. Digite a chave original usada para gerar o hash na Vercel.'; return;}
     if (!response.ok) throw new Error('fetch');
     records = data.drafts; $('locked').hidden = true; $('dashboard').hidden = false;
     const key = records.map(r => `${r.id}:${r.revision}`).join('|'); if (key !== fingerprint || !fingerprint) {fingerprint = key; render();}
