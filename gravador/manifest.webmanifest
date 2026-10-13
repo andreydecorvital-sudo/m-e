@@ -1,0 +1,19 @@
+{
+  "name": "PMG Gravador de Tela",
+  "short_name": "PMG Gravador",
+  "description": "Grave a rotina no computador com um botão e salve o vídeo apenas no seu aparelho.",
+  "id": "/gravador/",
+  "start_url": "/gravador/",
+  "scope": "/gravador/",
+  "display": "standalone",
+  "background_color": "#f5f8f3",
+  "theme_color": "#07573b",
+  "icons": [
+    {
+      "src": "/assets/pmg-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
