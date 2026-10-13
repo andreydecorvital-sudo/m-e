@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07573b">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Gravador simples para demonstrar a rotina da PMG no computador. O vídeo fica no seu aparelho.">
+  <link rel="manifest" href="/gravador/manifest.webmanifest">
+  <link rel="icon" href="/assets/pmg-logo.png">
+  <link rel="stylesheet" href="/gravador/style.css">
+  <title>PMG Gravador — Gravar minha tela</title>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <img src="/assets/pmg-logo.png" alt="Logo PMG" width="52" height="52">
+      <div><b>PMG Gravador</b><span>Uma ajuda para mostrar seu trabalho ao Andrey</span></div>
+    </div>
+  </header>
+  <main class="main">
+    <p class="eyebrow">FÁCIL DE USAR NO COMPUTADOR</p>
+    <h1>Mostre como você trabalha.</h1>
+    <p class="intro">Grave sua rotina na PMG. Quando terminar, o vídeo será salvo no seu computador. Você decide se quer enviá-lo.</p>
+    <section class="card" aria-labelledby="rec-title">
+      <div class="status" role="status"><span class="dot" id="dot"></span><span id="state">Pronta para gravar</span><span class="timer" id="timer" aria-live="off">00:00</span></div>
+      <h2 id="rec-title">Gravador de tela</h2>
+      <p class="hint" id="instruction">Clique no botão verde. Na janela que aparecer, escolha <strong>Tela inteira</strong> e depois <strong>Compartilhar</strong>.</p>
+      <label class="check" id="mic-label"><input type="checkbox" id="mic"> <span>Quero explicar falando enquanto gravo (microfone)</span></label>
+      <button id="start" class="btn main-btn" type="button">● Iniciar gravação</button>
+      <button id="stop" class="btn stop-btn" type="button" hidden>■ Parar e salvar vídeo</button>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+      <section id="result" class="result" hidden>
+        <strong>✓ Vídeo preparado!</strong>
+        <p>O vídeo foi enviado para a pasta <b>Downloads</b> do seu computador. Se o navegador não salvar sozinho, clique no botão abaixo.</p>
+        <a id="download" class="btn download-btn" href="#" download>↓ Baixar vídeo novamente</a>
+        <p class="footnote">Depois, envie o arquivo ao Andrey pelo WhatsApp como <b>Documento</b> para manter a qualidade.</p>
+        <button id="record-again" type="button" class="text-button">Gravar outro vídeo</button>
+      </section>
+    </section>
+    <section class="instructions" aria-labelledby="how">
+      <h2 id="how">É só fazer assim:</h2>
+      <ol>
+        <li><span>1</span><p>Clique em <b>Iniciar gravação</b>.</p></li>
+        <li><span>2</span><p>Escolha <b>Tela inteira</b> e confirme em <b>Compartilhar</b>.</p></li>
+        <li><span>3</span><p>Abra a PMG e trabalhe normalmente por até 10 minutos. Não mostre senhas ou dados de clientes.</p></li>
+        <li><span>4</span><p>Volte aqui, clique em <b>Parar e salvar</b> e envie o vídeo ao Andrey.</p></li>
+      </ol>
+    </section>
+    <p class="privacy"><b>Privacidade:</b> o vídeo não é enviado ao site nem à PMG. Ele é gravado no navegador e salvo somente no seu computador. Evite mostrar senhas, dados pessoais de clientes e notificações.</p>
+  </main>
+  <script src="/gravador/app.js" defer></script>
+</body>
+</html>
