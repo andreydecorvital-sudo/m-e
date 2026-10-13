@@ -7,6 +7,7 @@
     {"source": "/mae", "destination": "/index.html"},
     {"source": "/tia", "destination": "/index.html"},
     {"source": "/painel", "destination": "/admin.html"},
+    {"source": "/admin", "destination": "/admin.html"},
     {"source": "/ofertas", "destination": "/ofertas.html"}
   ]
 }
