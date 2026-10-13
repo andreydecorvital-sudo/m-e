@@ -6,6 +6,7 @@
   "rewrites": [
     {"source": "/mae", "destination": "/index.html"},
     {"source": "/tia", "destination": "/index.html"},
-    {"source": "/painel", "destination": "/admin.html"}
+    {"source": "/painel", "destination": "/admin.html"},
+    {"source": "/ofertas", "destination": "/ofertas.html"}
   ]
 }

@@ -19,7 +19,8 @@ function personCards() {
     if (latest) card.append(node('p', null, 'Último salvamento: ' + date(latest.updatedAt)));
     const links = node('div', 'person-links'), preview = node('a', null, 'Ver formulário'); preview.href = `/${profile}?preview=1`; preview.target = '_blank'; preview.rel = 'noopener noreferrer';
     const share = node('button', null, 'Copiar link para ela'); share.type = 'button'; share.addEventListener('click', () => copy(`${location.origin}/${profile}`));
-    links.append(preview, share); if (latest) {const read = node('button', null, 'Ver respostas'); read.type = 'button'; read.addEventListener('click', () => {selected = latest.id; filter = 'all'; render(); $('detail').scrollIntoView({block: 'start'});}); links.append(read);} card.append(links); $('person-cards').append(card);
+    const offers = node('a', null, 'Abrir bancada de ofertas'); offers.href = `/ofertas?para=${profile}`; offers.target = '_blank'; offers.rel = 'noopener noreferrer';
+    links.append(preview, share, offers); if (latest) {const read = node('button', null, 'Ver respostas'); read.type = 'button'; read.addEventListener('click', () => {selected = latest.id; filter = 'all'; render(); $('detail').scrollIntoView({block: 'start'});}); links.append(read);} card.append(links); $('person-cards').append(card);
   }
 }
 function sessions() {
